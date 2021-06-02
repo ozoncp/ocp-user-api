@@ -60,7 +60,7 @@ var _ = Describe("Extractor", func() {
 
 		It("", func() {
 			Expect(extractResult.Users).Should(Equal(expectedUsers))
-			Expect(extractResult.Errors).Should(Equal(expectedErrors))
+			Expect(extractResult.Errors).Should(BeEmpty())
 		})
 	})
 
@@ -79,7 +79,7 @@ var _ = Describe("Extractor", func() {
 
 		It("", func() {
 			Expect(extractResult.Users).Should(Equal(expectedUsers))
-			Expect(extractResult.Errors).Should(Equal(expectedErrors))
+			Expect(extractResult.Errors).Should(BeEmpty())
 		})
 	})
 
