@@ -28,12 +28,12 @@ func SliceUsersToMap(users []models.User) (map[uint64]models.User, error) {
 }
 
 // If batch size is zero or users array is nil or empty, then return empty result array
-func SplitToBulks(users []models.User, bulkSize uint) ([][]models.User, error) {
+func SplitToChunks(users []models.User, bulkSize int) ([][]models.User, error) {
 	if bulkSize > math.MaxInt32 {
 		return nil, errors.New("too large bulk size")
 	}
 
-	if bulkSize == 0 {
+	if bulkSize <= 0 {
 		return nil, errors.New("bulk size must be a possitive integer")
 	}
 

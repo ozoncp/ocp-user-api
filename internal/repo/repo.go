@@ -6,7 +6,8 @@ import (
 )
 
 type Repo interface {
-	CreateUser(ctx context.Context) (uint64, error)
+	CreateUser(ctx context.Context, user *models.User) (uint64, error)
+	CreateUsers(ctx context.Context, users []models.User) error
 	UpdateUser(ctx context.Context, user *models.User) error
 	RemoveUser(ctx context.Context, userId uint64) error
 	GetUser(ctx context.Context, userId uint64) (*models.User, error)
