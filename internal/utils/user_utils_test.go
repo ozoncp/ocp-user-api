@@ -60,11 +60,11 @@ func TestSliceUsersToMap(t *testing.T) {
 	}
 }
 
-func TestSplitToBulks(t *testing.T) {
+func TestSplitToChunks(t *testing.T) {
 	cases := []struct {
 		name      string
 		users     []models.User
-		batchSize uint
+		batchSize int
 		expected  [][]models.User
 		isError   bool
 	}{
@@ -77,7 +77,7 @@ func TestSplitToBulks(t *testing.T) {
 	}
 
 	for _, item := range cases {
-		actual, err := SplitToBulks(item.users, item.batchSize)
+		actual, err := SplitToChunks(item.users, item.batchSize)
 
 		if item.isError {
 			if err == nil {
