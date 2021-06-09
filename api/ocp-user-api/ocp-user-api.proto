@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+
+package ocp.user.api;
+
+option go_package = "gihtub.com/ozoncp/ocp-user-api/pkg/ocp-user-api;oct_user_api";
+
+service OcpUserApi {
+
+    rpc ListUsersV1(ListUsersV1Request) returns (ListUsersV1Response) {
+        option (google.api.http) = {
+            get: "/v1/users"
+        };
+    }
+
+    rpc DescribeUserV1(DescribeUserV1Request) returns (DescribeUserV1Response) {
+        option (google.api.http) = {
+            get: "/v1/users/{user_id}"
+        };
+    }
+
+    rpc CreateUserV1(CreateUserV1Request) returns (CreateUserV1Response) {
+        option (google.api.http) = {
+            post: "/v1/users"
+        };
+    }
+
+    rpc RemoveUserV1(RemoveUserV1Request) returns (RemoveUserV1Response) {
+        option (google.api.http) = {
+            delete: "/v1/users/{user_id}"
+        };
+    }
+}
+
+message ListUsersV1Request {
+    uint64 limit = 1;
+    uint64 offset = 2;
+}
+
+message ListUsersV1Response {
+    repeated User users = 1;
+}
+
+message CreateUserV1Request {
+    uint64 calendar_id = 2;
+    uint64 resume_id = 3;
+    UserProfile profile = 4;
+}
+
+message CreateUserV1Response {
+    uint64 user_id = 1;
+}
+
+message RemoveUserV1Request {
+		uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message RemoveUserV1Response {
+    bool deleted = 1;
+}
+
+message DescribeUserV1Request {
+		uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message DescribeUserV1Response {
+    User user = 1;
+}
+
+message UserProfile {
+    string name = 1;
+    string surname = 2;
+    string patronymic = 3;
+    string email = 4;
+}
+
+message User {
+    uint64 id = 1 [(validate.rules).uint64.gt = 0];
+    uint64 calendar_id = 2;
+    uint64 resume_id = 3;
+    UserProfile profile = 4;
+}
