@@ -5,7 +5,7 @@ import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 package ocp.user.api;
 
-option go_package = "gihtub.com/ozoncp/ocp-user-api/pkg/ocp-user-api;oct_user_api";
+option go_package = "gihtub.com/ozoncp/ocp-user-api/pkg/ocp-user-api;ocp_user_api";
 
 service OcpUserApi {
 

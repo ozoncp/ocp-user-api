@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	desc "ocp-user-api/pkg/ocp-user-api"
+	desc "github.com/ozoncp/ocp-user-api/pkg/ocp-user-api"
 )
 
 type api struct {

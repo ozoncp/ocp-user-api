@@ -2,11 +2,11 @@
 // source: api/ocp-user-api/ocp-user-api.proto
 
 /*
-Package oct_user_api is a reverse proxy.
+Package ocp_user_api is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package oct_user_api
+package ocp_user_api
 
 import (
 	"context"
