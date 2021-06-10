@@ -80,15 +80,15 @@ func request_OcpUserApi_DescribeUserV1_0(ctx context.Context, marshaler runtime.
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := client.DescribeUserV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -107,15 +107,15 @@ func local_request_OcpUserApi_DescribeUserV1_0(ctx context.Context, marshaler ru
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := server.DescribeUserV1(ctx, &protoReq)
@@ -170,15 +170,15 @@ func request_OcpUserApi_RemoveUserV1_0(ctx context.Context, marshaler runtime.Ma
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := client.RemoveUserV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -197,15 +197,15 @@ func local_request_OcpUserApi_RemoveUserV1_0(ctx context.Context, marshaler runt
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := server.RemoveUserV1(ctx, &protoReq)
@@ -438,11 +438,11 @@ func RegisterOcpUserApiHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 var (
 	pattern_OcpUserApi_ListUsersV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "users"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_OcpUserApi_DescribeUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "user_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_OcpUserApi_DescribeUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "userId"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_OcpUserApi_CreateUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "users"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_OcpUserApi_RemoveUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "user_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_OcpUserApi_RemoveUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "userId"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
