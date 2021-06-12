@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"errors"
+	"database/sql"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -71,6 +72,10 @@ func (r *repo) GetUser(ctx context.Context, userId uint64) (*models.User, error)
 		&user.Patronymic,
 		&user.Email,
 	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+
 		return nil, err
 	}
 
