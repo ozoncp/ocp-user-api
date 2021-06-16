@@ -13,18 +13,17 @@ import (
 )
 
 const (
-	grpcPort    = ":7002"
-	databaseURL = ""
+	grpcPort    = "7002"
 )
 
 func runGrpc() {
-	listen, err := net.Listen("tcp", grpcPort)
+	listen, err := net.Listen("tcp", ":" + grpcPort)
 
 	if err != nil {
 		log.Error().Err(err).Msg("failed to listen")
 	}
 
-	db, err := sqlx.Connect("postgres", databaseURL)
+	db, err := sqlx.Connect("postgres", "postgres://ocpuser:ocpuser@localhost:5432/ocp?sslmode=disable")
 	if err != nil {
 		log.Error().Err(err).Msg("error open db")
 		return

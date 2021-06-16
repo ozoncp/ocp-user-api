@@ -47,7 +47,7 @@ message ListUsersV1Response {
 message CreateUserV1Request {
     uint64 calendarId = 2;
     uint64 resumeId = 3;
-    UserProfile profile = 4;
+    UserProfile profile = 4 [(validate.rules).message.required = true];
 }
 
 message CreateUserV1Response {

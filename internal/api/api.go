@@ -39,9 +39,9 @@ func (a *api) ListUsersV1(
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	users := make([]*desc.User, len(searchResult.Items))
-	for i, user := range searchResult.Items {
-		users[i] = repoUserToProtoUser(&user)
+	users := make([]*desc.User, 0, len(searchResult.Items))
+	for _, user := range searchResult.Items {
+		users = append(users, repoUserToProtoUser(&user))
 	}
 
 	log.Info().Msgf("found %d users, NextOffset: %d", len(users), searchResult.NextOffset)
