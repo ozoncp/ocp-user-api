@@ -2,8 +2,8 @@ package repo
 
 import (
 	"context"
-	"errors"
 	"database/sql"
+	"errors"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -55,23 +55,19 @@ func (r *repo) CreateUser(ctx context.Context, user *models.User) (uint64, error
 }
 
 func (r *repo) GetUser(ctx context.Context, userId uint64) (*models.User, error) {
-	query := squirrel.Select("id", "calendar", "resume", "name", "surname", "patronymic", "email").
+	queryBuilder := squirrel.Select("id", "calendar", "resume", "name", "surname", "patronymic", "email").
 		From(tableName).
 		Where(squirrel.Eq{"id": userId}).
 		RunWith(r.db).
 		PlaceholderFormat(squirrel.Dollar)
 
-	var user models.User
+	query, args, err := queryBuilder.ToSql()
+	if err != nil {
+		return nil, err
+	}
 
-	if err := query.QueryRowContext(ctx).Scan(
-		&user.Id,
-		&user.CalendarId,
-		&user.ResumeId,
-		&user.Name,
-		&user.Surname,
-		&user.Patronymic,
-		&user.Email,
-	); err != nil {
+	var users []*models.User
+	if err = r.db.SelectContext(ctx, &users, query, args...); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
@@ -79,7 +75,7 @@ func (r *repo) GetUser(ctx context.Context, userId uint64) (*models.User, error)
 		return nil, err
 	}
 
-	return &user, nil
+	return users[0], nil
 }
 
 func (r *repo) RemoveUser(ctx context.Context, userId uint64) error {
@@ -105,6 +101,8 @@ func (r *repo) SearchUsers(ctx context.Context, params models.UserSearchParams) 
 	if err != nil {
 		return nil, err
 	}
+
+	defer rows.Close()
 
 	var users []models.User
 

@@ -94,10 +94,10 @@ func (a *api) CreateUserV1(
 	user := &models.User{
 		CalendarId: req.CalendarId,
 		ResumeId:   req.ResumeId,
-		Name:       req.Profile.Name,
-		Surname:    req.Profile.Surname,
-		Patronymic: req.Profile.Patronymic,
-		Email:      req.Profile.Email,
+		Name:       req.Profile.GetName(),
+		Surname:    req.Profile.GetSurname(),
+		Patronymic: req.Profile.GetPatronymic(),
+		Email:      req.Profile.GetEmail(),
 	}
 	userId, err := a.userRepo.CreateUser(ctx, user)
 
