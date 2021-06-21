@@ -109,10 +109,10 @@ func (mr *MockRepoMockRecorder) RemoveUser(arg0, arg1 interface{}) *gomock.Call 
 }
 
 // SearchUsers mocks base method.
-func (m *MockRepo) SearchUsers(arg0 context.Context, arg1 models.UserSearchParams) (models.UserSearchResult, error) {
+func (m *MockRepo) SearchUsers(arg0 context.Context, arg1 models.UserSearchParams) (*models.UserSearchResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchUsers", arg0, arg1)
-	ret0, _ := ret[0].(models.UserSearchResult)
+	ret0, _ := ret[0].(*models.UserSearchResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -16,7 +16,7 @@ type User struct {
 }
 
 type UserSearchParams struct {
-	Count  uint32
+	Count  uint64
 	Offset uint64
 }
 

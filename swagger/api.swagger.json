@@ -69,7 +69,7 @@
         ]
       }
     },
-    "/v1/users/{user_id}": {
+    "/v1/users/{userId}": {
       "get": {
         "operationId": "OcpUserApi_DescribeUserV1",
         "responses": {
@@ -88,7 +88,7 @@
         },
         "parameters": [
           {
-            "name": "user_id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -117,7 +117,7 @@
         },
         "parameters": [
           {
-            "name": "user_id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -134,7 +134,7 @@
     "apiCreateUserV1Response": {
       "type": "object",
       "properties": {
-        "user_id": {
+        "userId": {
           "type": "string",
           "format": "uint64"
         }
@@ -156,6 +156,10 @@
           "items": {
             "$ref": "#/definitions/apiUser"
           }
+        },
+        "nextOffset": {
+          "type": "string",
+          "format": "uint64"
         }
       }
     },
@@ -174,11 +178,11 @@
           "type": "string",
           "format": "uint64"
         },
-        "calendar_id": {
+        "calendarId": {
           "type": "string",
           "format": "uint64"
         },
-        "resume_id": {
+        "resumeId": {
           "type": "string",
           "format": "uint64"
         },
