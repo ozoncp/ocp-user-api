@@ -51,11 +51,12 @@ func (mr *MockRepoMockRecorder) CreateUser(arg0, arg1 interface{}) *gomock.Call 
 }
 
 // CreateUsers mocks base method.
-func (m *MockRepo) CreateUsers(arg0 context.Context, arg1 []models.User) error {
+func (m *MockRepo) CreateUsers(arg0 context.Context, arg1 []models.User) ([]uint64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateUsers", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].([]uint64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateUsers indicates an expected call of CreateUsers.
@@ -95,11 +96,12 @@ func (mr *MockRepoMockRecorder) GetUsers(arg0, arg1 interface{}) *gomock.Call {
 }
 
 // RemoveUser mocks base method.
-func (m *MockRepo) RemoveUser(arg0 context.Context, arg1 uint64) error {
+func (m *MockRepo) RemoveUser(arg0 context.Context, arg1 uint64) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RemoveUser", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // RemoveUser indicates an expected call of RemoveUser.
@@ -109,10 +111,10 @@ func (mr *MockRepoMockRecorder) RemoveUser(arg0, arg1 interface{}) *gomock.Call 
 }
 
 // SearchUsers mocks base method.
-func (m *MockRepo) SearchUsers(arg0 context.Context, arg1 models.UserSearchParams) (models.UserSearchResult, error) {
+func (m *MockRepo) SearchUsers(arg0 context.Context, arg1 models.UserSearchParams) (*models.UserSearchResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchUsers", arg0, arg1)
-	ret0, _ := ret[0].(models.UserSearchResult)
+	ret0, _ := ret[0].(*models.UserSearchResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -124,11 +126,12 @@ func (mr *MockRepoMockRecorder) SearchUsers(arg0, arg1 interface{}) *gomock.Call
 }
 
 // UpdateUser mocks base method.
-func (m *MockRepo) UpdateUser(arg0 context.Context, arg1 *models.User) error {
+func (m *MockRepo) UpdateUser(arg0 context.Context, arg1 *models.User) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateUser", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // UpdateUser indicates an expected call of UpdateUser.

@@ -2,11 +2,11 @@
 // source: api/ocp-user-api/ocp-user-api.proto
 
 /*
-Package oct_user_api is a reverse proxy.
+Package ocp_user_api is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package oct_user_api
+package ocp_user_api
 
 import (
 	"context"
@@ -80,15 +80,15 @@ func request_OcpUserApi_DescribeUserV1_0(ctx context.Context, marshaler runtime.
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := client.DescribeUserV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -107,15 +107,15 @@ func local_request_OcpUserApi_DescribeUserV1_0(ctx context.Context, marshaler ru
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := server.DescribeUserV1(ctx, &protoReq)
@@ -170,15 +170,15 @@ func request_OcpUserApi_RemoveUserV1_0(ctx context.Context, marshaler runtime.Ma
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := client.RemoveUserV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -197,18 +197,126 @@ func local_request_OcpUserApi_RemoveUserV1_0(ctx context.Context, marshaler runt
 		_   = err
 	)
 
-	val, ok = pathParams["user_id"]
+	val, ok = pathParams["userId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "user_id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
 	}
 
 	protoReq.UserId, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "user_id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
 	}
 
 	msg, err := server.RemoveUserV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_OcpUserApi_MultiCreateUserV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_OcpUserApi_MultiCreateUserV1_0(ctx context.Context, marshaler runtime.Marshaler, client OcpUserApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq MultiCreateUserV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_OcpUserApi_MultiCreateUserV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.MultiCreateUserV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_OcpUserApi_MultiCreateUserV1_0(ctx context.Context, marshaler runtime.Marshaler, server OcpUserApiServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq MultiCreateUserV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_OcpUserApi_MultiCreateUserV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.MultiCreateUserV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_OcpUserApi_UpdateUserV1_0 = &utilities.DoubleArray{Encoding: map[string]int{"userId": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
+func request_OcpUserApi_UpdateUserV1_0(ctx context.Context, marshaler runtime.Marshaler, client OcpUserApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UpdateUserV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["userId"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
+	}
+
+	protoReq.UserId, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_OcpUserApi_UpdateUserV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.UpdateUserV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_OcpUserApi_UpdateUserV1_0(ctx context.Context, marshaler runtime.Marshaler, server OcpUserApiServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UpdateUserV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["userId"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "userId")
+	}
+
+	protoReq.UserId, err = runtime.Uint64(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "userId", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_OcpUserApi_UpdateUserV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.UpdateUserV1(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -308,6 +416,52 @@ func RegisterOcpUserApiHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		}
 
 		forward_OcpUserApi_RemoveUserV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_OcpUserApi_MultiCreateUserV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_OcpUserApi_MultiCreateUserV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_OcpUserApi_MultiCreateUserV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_OcpUserApi_UpdateUserV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_OcpUserApi_UpdateUserV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_OcpUserApi_UpdateUserV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -432,17 +586,61 @@ func RegisterOcpUserApiHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 
 	})
 
+	mux.Handle("POST", pattern_OcpUserApi_MultiCreateUserV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_OcpUserApi_MultiCreateUserV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_OcpUserApi_MultiCreateUserV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_OcpUserApi_UpdateUserV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_OcpUserApi_UpdateUserV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_OcpUserApi_UpdateUserV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
 var (
 	pattern_OcpUserApi_ListUsersV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "users"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_OcpUserApi_DescribeUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "user_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_OcpUserApi_DescribeUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "userId"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_OcpUserApi_CreateUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "users"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_OcpUserApi_RemoveUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "user_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_OcpUserApi_RemoveUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "userId"}, "", runtime.AssumeColonVerbOpt(true)))
+
+	pattern_OcpUserApi_MultiCreateUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "users"}, "", runtime.AssumeColonVerbOpt(true)))
+
+	pattern_OcpUserApi_UpdateUserV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "users", "userId"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
@@ -453,4 +651,8 @@ var (
 	forward_OcpUserApi_CreateUserV1_0 = runtime.ForwardResponseMessage
 
 	forward_OcpUserApi_RemoveUserV1_0 = runtime.ForwardResponseMessage
+
+	forward_OcpUserApi_MultiCreateUserV1_0 = runtime.ForwardResponseMessage
+
+	forward_OcpUserApi_UpdateUserV1_0 = runtime.ForwardResponseMessage
 )

@@ -1,4 +1,4 @@
-module ocp-user-api/pkg/ocp-user-api
+module github.com/ozoncp/ocp-user-api/pkg/ocp-user-api
 
 go 1.16
 

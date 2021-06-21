@@ -37,7 +37,7 @@ func (f *flusher) Flush(ctx context.Context, users []models.User) int {
 	}
 
 	for chunkIndex, chunk := range chunks {
-		if err := f.userRepo.CreateUsers(ctx, chunk); err != nil {
+		if _, err := f.userRepo.CreateUsers(ctx, chunk); err != nil {
 			return chunkIndex * f.chunkSize
 		}
 	}
