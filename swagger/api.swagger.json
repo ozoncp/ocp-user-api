@@ -49,6 +49,38 @@
         ]
       },
       "post": {
+        "operationId": "OcpUserApi_CreateUserV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "OcpUserApi"
+        ]
+      }
+    },
+    "/v1/users/multi": {
+      "post": {
         "operationId": "OcpUserApi_MultiCreateUserV1",
         "responses": {
           "200": {
@@ -64,6 +96,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiMultiCreateUserV1Request"
+            }
+          }
+        ],
         "tags": [
           "OcpUserApi"
         ]
@@ -151,6 +193,14 @@
             "required": true,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateUserV1Request"
+            }
           }
         ],
         "tags": [
@@ -160,6 +210,22 @@
     }
   },
   "definitions": {
+    "apiCreateUserV1Request": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "resumeId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "profile": {
+          "$ref": "#/definitions/apiUserProfile"
+        }
+      }
+    },
     "apiCreateUserV1Response": {
       "type": "object",
       "properties": {
@@ -192,6 +258,17 @@
         }
       }
     },
+    "apiMultiCreateUserV1Request": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiUserParams"
+          }
+        }
+      }
+    },
     "apiMultiCreateUserV1Response": {
       "type": "object",
       "properties": {
@@ -206,6 +283,18 @@
       "properties": {
         "deleted": {
           "type": "boolean"
+        }
+      }
+    },
+    "apiUpdateUserV1Request": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "userParams": {
+          "$ref": "#/definitions/apiUserParams"
         }
       }
     },

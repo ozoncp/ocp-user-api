@@ -2,10 +2,11 @@ package api
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
+	spanlog "github.com/opentracing/opentracing-go/log"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -13,7 +14,12 @@ import (
 	"github.com/ozoncp/ocp-user-api/internal/models"
 	"github.com/ozoncp/ocp-user-api/internal/producer"
 	"github.com/ozoncp/ocp-user-api/internal/repo"
+	"github.com/ozoncp/ocp-user-api/internal/utils"
 	desc "github.com/ozoncp/ocp-user-api/pkg/ocp-user-api"
+)
+
+const (
+	chunkSize = 10
 )
 
 type api struct {
@@ -66,7 +72,7 @@ func (a *api) DescribeUserV1(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	log.Info().Msgf("get user %d", req.UserId)
+	log.Info().Uint64("userId", req.UserId).Msg("get user")
 
 	user, err := a.userRepo.GetUser(ctx, req.UserId)
 
@@ -76,11 +82,11 @@ func (a *api) DescribeUserV1(
 	}
 
 	if user == nil {
-		log.Info().Msgf("user %d not found", req.UserId)
+		log.Info().Uint64("userId", req.UserId).Msg("user not found")
 		return nil, status.Error(codes.NotFound, "user was not found")
 	}
 
-	log.Debug().Msgf(" found user% %v", user)
+	log.Debug().Msgf(" found user %v", user)
 
 	return &desc.DescribeUserV1Response{
 		User: repoUserToProtoUser(user),
@@ -122,7 +128,7 @@ func (a *api) CreateUserV1(
 		log.Error().Err(err).Msg("publish telemetry event")
 	}
 
-	log.Info().Msgf("create new user %d", userId)
+	log.Info().Uint64("userId", userId).Msg("create new user")
 
 	return &desc.CreateUserV1Response{
 		UserId: userId,
@@ -138,7 +144,7 @@ func (a *api) RemoveUserV1(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	log.Info().Msgf("remove user %d", req.UserId)
+	log.Info().Uint64("userId", req.UserId).Msg("remove user")
 
 	isDeleted, err := a.userRepo.RemoveUser(ctx, req.UserId)
 
@@ -148,7 +154,7 @@ func (a *api) RemoveUserV1(
 	}
 
 	if isDeleted {
-		log.Info().Msgf("user %d was deleted", req.UserId)
+		log.Info().Uint64("userId", req.UserId).Msg("user was deleted")
 
 		err := a.eventProducer.SendEvent(producer.Event{
 			Type: producer.Removed,
@@ -176,7 +182,7 @@ func (a *api) UpdateUserV1(
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	log.Info().Msgf("update user %d", req.UserId)
+	log.Info().Uint64("userId", req.UserId).Msg("update user")
 
 	updated, err := a.userRepo.UpdateUser(ctx, &models.User{
 		CalendarId: req.UserParams.CalendarId,
@@ -193,7 +199,7 @@ func (a *api) UpdateUserV1(
 	}
 
 	if updated {
-		log.Info().Msgf("user %d was updated", req.UserId)
+		log.Info().Uint64("userId", req.UserId).Msg("user was updated")
 
 		err := a.eventProducer.SendEvent(producer.Event{
 			Type: producer.Updated,
@@ -217,7 +223,7 @@ func (a *api) MultiCreateUserV1(
 	req *desc.MultiCreateUserV1Request,
 ) (*desc.MultiCreateUserV1Response, error) {
 	traceId := uuid.New().String()
-	span, _ := opentracing.StartSpanFromContext(ctx, fmt.Sprintf("TraceId[%s]", traceId))
+	span, context := opentracing.StartSpanFromContext(ctx, "MultiCreateUserV1")
 	defer span.Finish()
 
 	logger := log.With().
@@ -241,31 +247,48 @@ func (a *api) MultiCreateUserV1(
 			Email:      user.Profile.GetEmail(),
 		})
 	}
-	ids, err := a.userRepo.CreateUsers(ctx, users)
+
+	chunks, err := utils.SplitToChunks(users, chunkSize)
 
 	if err != nil {
-		logger.Error().Err(err).Msg("internal error")
-
-		if len(ids) == 0 {
-			return nil, status.Error(codes.Internal, err.Error())
-		}
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	for _, id := range ids {
-		err := a.eventProducer.SendEvent(producer.Event{
-			Type: producer.Created,
-			Payload: map[string]interface{}{
-				"Id": id,
-			},
-		})
+	count := 0
 
-		if err != nil {
-			logger.Error().Err(err).Msg("publish telemetry event")
-		}
+	for _, chunk := range chunks {
+		func(chunk []models.User) {
+			childSpan, _ := opentracing.StartSpanFromContext(context, "process batch")
+			defer childSpan.Finish()
+
+			ids, err := a.userRepo.CreateUsers(ctx, chunk)
+
+			if err == nil {
+				count += len(ids)
+
+				for _, id := range ids {
+					err := a.eventProducer.SendEvent(producer.Event{
+						Type: producer.Created,
+						Payload: map[string]interface{}{
+							"Id": id,
+						},
+					})
+
+					if err != nil {
+						logger.Error().Err(err).Msg("publish telemetry event")
+					}
+				}
+			} else {
+				childSpan.LogFields(spanlog.Error(err))
+				ext.Error.Set(childSpan, true)
+
+				logger.Error().Err(err).Msg("internal error")
+			}
+		}(chunk)
 	}
 
 	return &desc.MultiCreateUserV1Response{
-		Count: int64(len(users)),
+		Count: int64(count),
 	}, nil
 }
 

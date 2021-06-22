@@ -2,8 +2,8 @@ package repo
 
 import (
 	"context"
-	"errors"
 	"database/sql"
+	"errors"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -75,7 +75,12 @@ func (r *repo) GetUser(ctx context.Context, userId uint64) (*models.User, error)
 		return nil, err
 	}
 
-	return users[0], nil
+	var user *models.User
+	if len(users) > 0 {
+		user = users[0]
+	}
+
+	return user, nil
 }
 
 func (r *repo) RemoveUser(ctx context.Context, userId uint64) (bool, error) {
@@ -174,12 +179,14 @@ func (r *repo) CreateUsers(ctx context.Context, users []models.User) ([]uint64, 
 
 func (r *repo) UpdateUser(ctx context.Context, user *models.User) (bool, error) {
 	query := squirrel.Update(tableName).
-		Set("calendar", user.CalendarId).
-		Set("resume", user.ResumeId).
-		Set("name", user.Name).
-		Set("surname", user.Surname).
-		Set("patronymic", user.Patronymic).
-		Set("email", user.Email).
+		SetMap(map[string]interface{}{
+			"calendar":   user.CalendarId,
+			"resume":     user.ResumeId,
+			"name":       user.Name,
+			"surname":    user.Surname,
+			"patronymic": user.Patronymic,
+			"email":      user.Email,
+		}).
 		Where(squirrel.Eq{"id": user.Id}).
 		RunWith(r.db).
 		PlaceholderFormat(squirrel.Dollar)

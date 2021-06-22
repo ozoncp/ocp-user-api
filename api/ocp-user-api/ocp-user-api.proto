@@ -24,6 +24,7 @@ service OcpUserApi {
     rpc CreateUserV1(CreateUserV1Request) returns (CreateUserV1Response) {
         option (google.api.http) = {
             post: "/v1/users"
+            body: "*"
         };
     }
 
@@ -35,13 +36,15 @@ service OcpUserApi {
 
     rpc MultiCreateUserV1(MultiCreateUserV1Request) returns (MultiCreateUserV1Response) {
         option (google.api.http) = {
-            post: "/v1/users"
+            post: "/v1/users/multi"
+            body: "*"
         };
     }
 
     rpc UpdateUserV1(UpdateUserV1Request) returns (UpdateUserV1Response) {
         option (google.api.http) = {
             post: "/v1/users/{userId}"
+            body: "*"
         };
     }
 }
@@ -100,9 +103,9 @@ message UpdateUserV1Response {
 }
 
 message UserParams {
-    uint64 calendarId = 2;
-    uint64 resumeId = 3;
-    UserProfile profile = 4 [(validate.rules).message.required = true];
+    uint64 calendarId = 1;
+    uint64 resumeId = 2;
+    UserProfile profile = 3 [(validate.rules).message.required = true];
 }
 
 message UserProfile {
