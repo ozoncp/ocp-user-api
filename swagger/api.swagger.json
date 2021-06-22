@@ -64,12 +64,54 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserV1Request"
+            }
+          }
+        ],
         "tags": [
           "OcpUserApi"
         ]
       }
     },
-    "/v1/users/{user_id}": {
+    "/v1/users/multi": {
+      "post": {
+        "operationId": "OcpUserApi_MultiCreateUserV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiMultiCreateUserV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiMultiCreateUserV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "OcpUserApi"
+        ]
+      }
+    },
+    "/v1/users/{userId}": {
       "get": {
         "operationId": "OcpUserApi_DescribeUserV1",
         "responses": {
@@ -88,7 +130,7 @@
         },
         "parameters": [
           {
-            "name": "user_id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -117,7 +159,7 @@
         },
         "parameters": [
           {
-            "name": "user_id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "type": "string",
@@ -127,14 +169,67 @@
         "tags": [
           "OcpUserApi"
         ]
+      },
+      "post": {
+        "operationId": "OcpUserApi_UpdateUserV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUpdateUserV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateUserV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "OcpUserApi"
+        ]
       }
     }
   },
   "definitions": {
+    "apiCreateUserV1Request": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "resumeId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "profile": {
+          "$ref": "#/definitions/apiUserProfile"
+        }
+      }
+    },
     "apiCreateUserV1Response": {
       "type": "object",
       "properties": {
-        "user_id": {
+        "userId": {
           "type": "string",
           "format": "uint64"
         }
@@ -156,6 +251,30 @@
           "items": {
             "$ref": "#/definitions/apiUser"
           }
+        },
+        "nextOffset": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "apiMultiCreateUserV1Request": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiUserParams"
+          }
+        }
+      }
+    },
+    "apiMultiCreateUserV1Response": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -167,6 +286,26 @@
         }
       }
     },
+    "apiUpdateUserV1Request": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "userParams": {
+          "$ref": "#/definitions/apiUserParams"
+        }
+      }
+    },
+    "apiUpdateUserV1Response": {
+      "type": "object",
+      "properties": {
+        "updated": {
+          "type": "boolean"
+        }
+      }
+    },
     "apiUser": {
       "type": "object",
       "properties": {
@@ -174,11 +313,27 @@
           "type": "string",
           "format": "uint64"
         },
-        "calendar_id": {
+        "calendarId": {
           "type": "string",
           "format": "uint64"
         },
-        "resume_id": {
+        "resumeId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "profile": {
+          "$ref": "#/definitions/apiUserProfile"
+        }
+      }
+    },
+    "apiUserParams": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "resumeId": {
           "type": "string",
           "format": "uint64"
         },

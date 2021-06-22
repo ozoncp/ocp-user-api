@@ -5,7 +5,7 @@ import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 package ocp.user.api;
 
-option go_package = "gihtub.com/ozoncp/ocp-user-api/pkg/ocp-user-api;oct_user_api";
+option go_package = "gihtub.com/ozoncp/ocp-user-api/pkg/ocp-user-api;ocp_user_api";
 
 service OcpUserApi {
 
@@ -17,19 +17,34 @@ service OcpUserApi {
 
     rpc DescribeUserV1(DescribeUserV1Request) returns (DescribeUserV1Response) {
         option (google.api.http) = {
-            get: "/v1/users/{user_id}"
+            get: "/v1/users/{userId}"
         };
     }
 
     rpc CreateUserV1(CreateUserV1Request) returns (CreateUserV1Response) {
         option (google.api.http) = {
             post: "/v1/users"
+            body: "*"
         };
     }
 
     rpc RemoveUserV1(RemoveUserV1Request) returns (RemoveUserV1Response) {
         option (google.api.http) = {
-            delete: "/v1/users/{user_id}"
+            delete: "/v1/users/{userId}"
+        };
+    }
+
+    rpc MultiCreateUserV1(MultiCreateUserV1Request) returns (MultiCreateUserV1Response) {
+        option (google.api.http) = {
+            post: "/v1/users/multi"
+            body: "*"
+        };
+    }
+
+    rpc UpdateUserV1(UpdateUserV1Request) returns (UpdateUserV1Response) {
+        option (google.api.http) = {
+            post: "/v1/users/{userId}"
+            body: "*"
         };
     }
 }
@@ -41,20 +56,21 @@ message ListUsersV1Request {
 
 message ListUsersV1Response {
     repeated User users = 1;
+    uint64 nextOffset = 2;
 }
 
 message CreateUserV1Request {
-    uint64 calendar_id = 2;
-    uint64 resume_id = 3;
-    UserProfile profile = 4;
+    uint64 calendarId = 2;
+    uint64 resumeId = 3;
+    UserProfile profile = 4 [(validate.rules).message.required = true];
 }
 
 message CreateUserV1Response {
-    uint64 user_id = 1;
+    uint64 userId = 1;
 }
 
 message RemoveUserV1Request {
-		uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+	uint64 userId = 1 [(validate.rules).uint64.gt = 0];
 }
 
 message RemoveUserV1Response {
@@ -62,11 +78,34 @@ message RemoveUserV1Response {
 }
 
 message DescribeUserV1Request {
-		uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+	uint64 userId = 1 [(validate.rules).uint64.gt = 0];
 }
 
 message DescribeUserV1Response {
     User user = 1;
+}
+
+message MultiCreateUserV1Request {
+  repeated UserParams users = 1;
+}
+
+message MultiCreateUserV1Response {
+    int64 count = 1;
+}
+
+message UpdateUserV1Request {
+    uint64 userId = 1 [(validate.rules).uint64.gt = 0];
+    UserParams userParams = 2 [(validate.rules).message.required = true];
+}
+
+message UpdateUserV1Response {
+    bool updated = 1;
+}
+
+message UserParams {
+    uint64 calendarId = 1;
+    uint64 resumeId = 2;
+    UserProfile profile = 3 [(validate.rules).message.required = true];
 }
 
 message UserProfile {
@@ -78,7 +117,7 @@ message UserProfile {
 
 message User {
     uint64 id = 1 [(validate.rules).uint64.gt = 0];
-    uint64 calendar_id = 2;
-    uint64 resume_id = 3;
+    uint64 calendarId = 2;
+    uint64 resumeId = 3;
     UserProfile profile = 4;
 }
